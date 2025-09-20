@@ -1,5 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import React from "react";
+import React, { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import LobbyHeaderCarousel from "../components/LobbyHeaderCarousel";
 
@@ -17,6 +17,27 @@ const COLORS = {
 };
 
 export default function Index() {
+  const [filter, setFilter] = useState<"all" | "2p" | "6p">("all");
+
+  // Sample data with player count information
+  const gameData = [
+    { pv: "0.05", win: "Win 100 Coins", players: "6 Players", playing: "22 Playing", playerCount: 6 },
+    { pv: "0.1", win: "Win 200 Coins", players: "2 Players", playing: "128 Playing", playerCount: 2 },
+    { pv: "25.0", win: "Win 50K Coins", players: "2 Players", playing: "45 Playing", playerCount: 2 },
+    { pv: "50.0", win: "Win 50K Coins", players: "2 Players", playing: "45 Playing", playerCount: 2 },
+    { pv: "100.0", win: "Win 50K Coins", players: "2 Players", playing: "45 Playing", playerCount: 2 },
+    { pv: "1.0", win: "Win 1K Coins", players: "6 Players", playing: "32 Playing", playerCount: 6 },
+    { pv: "5.0", win: "Win 5K Coins", players: "6 Players", playing: "18 Playing", playerCount: 6 },
+  ];
+
+  // Filter data based on selected filter
+  const filteredData = gameData.filter(game => {
+    if (filter === "all") return true;
+    if (filter === "2p") return game.playerCount === 2;
+    if (filter === "6p") return game.playerCount === 6;
+    return true;
+  });
+
   return (
     <View style={styles.screen}>
       <LobbyHeaderCarousel />
@@ -24,9 +45,9 @@ export default function Index() {
       {/* Filters */}
       <View style={styles.filterRow}>
         <View style={{ flexDirection: "row", gap: 8 }}>
-          <Chip selected>All</Chip>
-          <Chip>2P</Chip>
-          <Chip>6P</Chip>
+          <Chip selected={filter === "all"} onPress={() => setFilter("all")}>All</Chip>
+          <Chip selected={filter === "2p"} onPress={() => setFilter("2p")}>2P</Chip>
+          <Chip selected={filter === "6p"} onPress={() => setFilter("6p")}>6P</Chip>
         </View>
         <View style={styles.rules}>
           <Text style={styles.rulesText}>Game Rules</Text>
@@ -47,13 +68,7 @@ export default function Index() {
       {/* Rows */}
       {/* <LabelPill text="LAST PLAYED" /> */}
       <ScrollView>
-        {[
-          { pv: "0.05", win: "Win 100 Coins", players: "6 Players", playing: "22 Playing" },
-          { pv: "0.1", win: "Win 200 Coins", players: "2 Players", playing: "128 Playing" },
-          { pv: "25.0", win: "Win 50K Coins", players: "2 Players", playing: "45 Playing" },
-          { pv: "50.0", win: "Win 50K Coins", players: "2 Players", playing: "45 Playing" },
-          { pv: "100.0", win: "Win 50K Coins", players: "2 Players", playing: "45 Playing" },
-        ].map((r, idx) => (
+        {filteredData.map((r, idx) => (
           <Row key={idx} {...r} />
         ))}
       </ScrollView>
@@ -62,11 +77,11 @@ export default function Index() {
   );
 }
 
-function Chip({ children, selected = false }: { children: React.ReactNode; selected?: boolean }) {
+function Chip({ children, selected = false, onPress }: { children: React.ReactNode; selected?: boolean; onPress?: () => void }) {
   return (
-    <View style={[styles.chip, selected && styles.chipSelected]}>
+    <Pressable style={[styles.chip, selected && styles.chipSelected]} onPress={onPress}>
       <Text style={[styles.chipText, selected && styles.chipTextSelected]}>{children}</Text>
-    </View>
+    </Pressable>
   );
 }
 
