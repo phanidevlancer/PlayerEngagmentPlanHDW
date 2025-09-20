@@ -1,98 +1,190 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { MaterialIcons } from "@expo/vector-icons";
+import React from "react";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import LobbyHeaderCarousel from "../components/LobbyHeaderCarousel";
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+const COLORS = {
+  // light theme
+  bg: "#F5F6F8",
+  card: "#FFFFFF",
+  border: "#E2E8F0",
+  text: "#0C1B2A",
+  subText: "#64748B",
+  muted: "#94A3B8",
+  highlight: "#F59E0B",
+  primary: "#0A4A8F",
+  green: "#22A06B",
+};
 
-export default function HomeScreen() {
+export default function Index() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <View style={styles.screen}>
+      <LobbyHeaderCarousel />
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      {/* Filters */}
+      <View style={styles.filterRow}>
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          <Chip selected>All</Chip>
+          <Chip>2P</Chip>
+          <Chip>6P</Chip>
+        </View>
+        <View style={styles.rules}>
+          <Text style={styles.rulesText}>Game Rules</Text>
+          <MaterialIcons name="info-outline" size={16} color={COLORS.muted} />
+        </View>
+      </View>
+
+      {/* Table header */}
+      <View style={styles.listHeader}>
+        <View style={styles.listHeaderLeft}>
+          <Text style={styles.listHeaderLabel}>Point Value</Text>
+          <MaterialIcons name="arrow-downward" size={16} color={COLORS.muted} />
+        </View>
+        <Text style={styles.listHeaderLabel}>Players</Text>
+        <Text style={styles.listHeaderLabel}>Action</Text>
+      </View>
+
+      {/* Rows */}
+      {/* <LabelPill text="LAST PLAYED" /> */}
+      <ScrollView>
+        {[
+          { pv: "0.05", win: "Win 100 Coins", players: "6 Players", playing: "22 Playing" },
+          { pv: "0.1", win: "Win 200 Coins", players: "2 Players", playing: "128 Playing" },
+          { pv: "25.0", win: "Win 50K Coins", players: "2 Players", playing: "45 Playing" },
+          { pv: "50.0", win: "Win 50K Coins", players: "2 Players", playing: "45 Playing" },
+          { pv: "100.0", win: "Win 50K Coins", players: "2 Players", playing: "45 Playing" },
+        ].map((r, idx) => (
+          <Row key={idx} {...r} />
+        ))}
+      </ScrollView>
+
+    </View>
+  );
+}
+
+function Chip({ children, selected = false }: { children: React.ReactNode; selected?: boolean }) {
+  return (
+    <View style={[styles.chip, selected && styles.chipSelected]}>
+      <Text style={[styles.chipText, selected && styles.chipTextSelected]}>{children}</Text>
+    </View>
+  );
+}
+
+function LabelPill({ text }: { text: string }) {
+  return (
+    <View style={styles.pillCenter}>
+      <Text style={styles.pillCenterText}>{text}</Text>
+    </View>
+  );
+}
+
+function Row({ pv, win, players, playing }: { pv: string; win: string; players: string; playing: string }) {
+  return (
+    <View style={styles.row}>
+      <View style={{ width: "25%" }}>
+        <Text style={styles.pv}>{pv}</Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 4, marginTop: 4 }}>
+          {/* ✅ use coin icon on light theme */}
+          <MaterialIcons name="notifications" size={14} color={COLORS.highlight} />
+          <Text style={styles.winText}>{win}</Text>
+        </View>
+      </View>
+      <View style={{ width: "50%", alignItems: "center" }}>
+        <Text style={styles.players}>{players}</Text>
+        <Text style={styles.playing}>{playing}</Text>
+      </View>
+      <Pressable style={styles.playBtn}>
+        <Text style={{ color: "#fff", fontWeight: "700" }}>PLAY</Text>
+      </Pressable>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  screen: { flex: 1, backgroundColor: COLORS.bg },
+
+  filterRow: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+
+  chip: {
+    backgroundColor: "#EEF2F7",
+    borderRadius: 999,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  chipSelected: { backgroundColor: "#E9EFFD", borderColor: "#C7DBFF" },
+  chipText: { color: COLORS.subText, fontWeight: "600", fontSize: 12 },
+  chipTextSelected: { color: COLORS.primary },
+
+  rules: { flexDirection: "row", alignItems: "center", gap: 6 },
+  rulesText: { color: COLORS.muted, fontSize: 12 },
+
+  listHeader: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: COLORS.border,
+    marginHorizontal: 16,
+    paddingBottom: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  listHeaderLeft: { flexDirection: "row", alignItems: "center", gap: 4 },
+  listHeaderLabel: { color: COLORS.muted, fontSize: 12 },
+
+  pillCenter: {
+    alignSelf: "center",
+    backgroundColor: "#EDF2F7",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 999,
+    marginTop: 12,
+    marginBottom: 4,
+  },
+  pillCenterText: { color: COLORS.muted, fontWeight: "700", fontSize: 12 },
+
+  row: {
+    backgroundColor: COLORS.card,
+    marginHorizontal: 16,
+    borderRadius: 12,
+    padding: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    // subtle shadow (iOS) / elevation (Android)
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 1,
+  },
+  pv: { color: COLORS.text, fontWeight: "800", fontSize: 18 },
+  winText: { color: COLORS.highlight, fontSize: 12, fontWeight: "700" },
+  players: { color: COLORS.text, fontWeight: "700" },
+  playing: { color: COLORS.subText, fontSize: 12, marginTop: 2 },
+
+  playBtn: {
+    backgroundColor: COLORS.green,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+  },
+
+  earnBtn: {
+    backgroundColor: COLORS.primary,
+    height: 48,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    gap: 8,
   },
 });

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Earn A23 Coins</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style type="text/tailwindcss">
+    :root {
+      --light-blue: #E9EFFD;
+      --primary-text: #1F2937;
+      --secondary-text: #6B7280;
+      --gold: #D97706;--green: #10B981;
+      --background-light: #F9FAFB;
+      --card-bg: #FFFFFF;
+      --progress-track: #E5E7EB;
+      --border-color: #E5E7EB;
+      --primary-action: #2563EB;
+      --success-bg: #F0FDF4;
+      --success-text: #16A34A;
+      --success-icon-bg: #D1FAE5;
+      --progress-indicator-bg: #E0F2FE;
+      --progress-indicator-text: #0284C7;
+      --progress-bar-fill-animated: #0EA5E9;
+      --hero-bg-start: #3B82F6;
+      --hero-bg-end: #1D4ED8;
+      --hero-text: #FFFFFF;
+      --hero-progress-track: rgba(255, 255, 255, 0.3);
+      --hero-progress-fill: #FBBF24;
+    }
+    body {
+      background-color: var(--background-light);
+      font-family: 'Roboto', sans-serif;
+      color: var(--primary-text);
+    }
+    .app-bar {
+      height: 56px;
+      background-color: var(--light-blue);
+      color: var(--primary-action);
+    }
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      padding: 16px 20px;
+      min-height: 44px;
+    }
+    .progress-bar {
+      height: 12px;
+      background-color: var(--progress-track);
+      border-radius: 9999px;
+      position: relative;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      background-color: var(--green);
+      border-radius: 9999px;
+      transition: width 0.5s ease-in-out;
+    }
+     .progress-bar-fill-animated {
+      background: linear-gradient(90deg, var(--progress-bar-fill-animated) 0%, #38BDF8 50%, var(--progress-bar-fill-animated) 100%);
+      background-size: 200% 200%;
+      animation: progress-animation 2s linear infinite;
+    }
+    @keyframes progress-animation {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
+    .task-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(37, 99, 235, 0.1);}
+    .reward-pill {
+      background-color: rgba(217, 119, 6, 0.1);
+      color: var(--gold);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .invite-button {
+        background-color: var(--primary-action);
+        color: white;
+        padding: 6px 16px;
+        border-radius: 9999px;
+        font-weight: 700;
+        font-size: 14px;
+    }
+    .dimmed {
+        opacity: 0.6;
+        background-color: var(--success-bg);
+        border-color: var(--success-text);
+    }
+    .completed-badge {
+      background-color: var(--success-text);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .completed-badge .material-symbols-outlined {
+        font-size: 18px;
+    }
+    @keyframes tada {
+        from {
+            transform: scale3d(1, 1, 1);
+        }
+        10%, 20% {
+            transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+        }
+        30%, 50%, 70%, 90% {
+            transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+        }
+        40%, 60%, 80% {
+            transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+        }
+        to {
+            transform: scale3d(1, 1, 1);
+        }
+    }
+    .animate-tada {
+        animation: tada 1s ease-in-out;
+    }
+    @keyframes bounce-in {
+        0% { transform: scale(0); opacity: 0; }
+        60% { transform: scale(1.1); opacity: 1; }
+        100% { transform: scale(1); }
+    }
+    .animate-bounce-in {
+        animation: bounce-in 0.5s ease-out;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen bg-[var(--background-light)]">
+<div class="max-w-md mx-auto bg-[var(--background-light)] flex flex-col min-h-screen">
+<header class="app-bar flex items-center justify-between px-4 fixed top-0 w-full max-w-md z-10">
+<div class="flex items-center gap-1 cursor-pointer">
+<span class="material-symbols-outlined">chevron_left</span>
+<span class="text-sm font-medium">Back to Lobby</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-xl">calendar_today</span>
+<span class="text-xs">Refreshes daily</span>
+</div>
+</header>
+<main class="flex-grow pt-14">
+<div class="px-4 py-2 text-right">
+<p class="text-xs text-[var(--secondary-text)]">Resets every day at 00:00 IST</p>
+</div>
+<div class="px-4 py-2">
+<div class="bg-white rounded-lg p-3 flex justify-between items-center border border-[var(--border-color)]">
+<span class="font-medium text-[var(--primary-text)]">Your Current Coins</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[var(--gold)] text-lg">monetization_on</span>
+<span class="font-bold text-[var(--gold)] text-lg">20,00,000</span>
+</div>
+</div>
+</div>
+<div class="px-4 py-4">
+<div class="bg-gradient-to-br from-[var(--hero-bg-start)] to-[var(--hero-bg-end)] rounded-2xl p-5 text-[var(--hero-text)] shadow-lg cursor-pointer">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl text-white">timer</span>
+</div>
+<div>
+<h3 class="text-xl font-bold">60 mins gameplay time</h3>
+<p class="text-sm opacity-80">Play for 23 minutes more to win</p>
+</div>
+</div>
+<div class="bg-white/20 rounded-full px-4 py-1.5 font-bold text-base flex items-center gap-1">
+<span class="material-symbols-outlined text-[var(--hero-progress-fill)] text-lg">monetization_on</span>
+<span>+10,000</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="progress-bar flex-grow h-3 bg-[var(--hero-progress-track)]">
+<div class="h-full rounded-full bg-[var(--hero-progress-fill)]" style="width: 37%;"></div>
+</div>
+<span class="text-sm font-medium">37/60</span>
+</div>
+</div>
+</div>
+<h2 class="text-lg font-bold text-[var(--primary-text)] px-4 pt-2 pb-2">Ways to earn more coins</h2>
+<div class="px-4 space-y-3 pb-4">
+<div class="card flex flex-col gap-4 cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="task-icon">
+<span class="material-symbols-outlined text-[var(--primary-action)]">military_tech</span>
+</div>
+<div class="flex-grow">
+<p class="text-base font-medium text-[var(--primary-text)]">Win 5 Fun Chips games (100-pt)</p>
+<p class="text-sm text-[var(--secondary-text)]">You're getting there!</p>
+</div>
+<div class="reward-pill">+5,000</div>
+</div>
+<div class="relative">
+<div class="progress-bar flex-grow">
+<div class="progress-bar-fill progress-bar-fill-animated h-full" style="width: 60%;"></div>
+</div>
+<div class="absolute top-[-26px] left-[60%] -translate-x-1/2 animate-bounce-in" style="transition: left 0.5s ease-in-out;">
+<div class="bg-[var(--progress-indicator-bg)] text-[var(--progress-indicator-text)] text-xs font-bold px-2 py-1 rounded-md whitespace-nowrap">3/5 Done</div>
+<div class="w-2 h-2 bg-[var(--progress-indicator-bg)] mx-auto rotate-45 -mt-1"></div>
+</div>
+</div>
+</div>
+<div class="card flex flex-col gap-3 cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="task-icon">
+<span class="material-symbols-outlined text-[var(--primary-action)]">pool</span>
+</div>
+<div class="flex-grow">
+<p class="text-base font-medium text-[var(--primary-text)]">Win 1 game of 101 Pool (any bet)</p>
+<p class="text-sm text-[var(--secondary-text)]">0/1 completed</p>
+</div>
+<div class="reward-pill">+1,000</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="progress-bar flex-grow">
+<div class="progress-bar-fill" style="width: 0%;"></div>
+</div>
+<span class="text-xs font-medium text-[var(--primary-text)]">0/1</span>
+</div>
+</div>
+<div class="card flex items-center gap-4 cursor-pointer">
+<div class="task-icon">
+<span class="material-symbols-outlined text-[var(--primary-action)]">visibility</span>
+</div>
+<div class="flex-grow">
+<p class="text-base font-medium text-[var(--primary-text)]">View a game result</p>
+<p class="text-sm text-[var(--secondary-text)]">Rewards stack today</p>
+</div>
+<div class="reward-pill">+100 each</div>
+</div>
+<div class="card flex items-center gap-4 cursor-pointer">
+<div class="task-icon">
+<span class="material-symbols-outlined text-[var(--primary-action)]">group_add</span>
+</div>
+<div class="flex-grow">
+<p class="text-base font-medium text-[var(--primary-text)]">Refer a friend</p>
+<p class="text-sm text-[var(--secondary-text)]">+1,000 for each successful referral</p>
+</div>
+<button class="invite-button">Invite</button>
+</div>
+<div class="card flex items-center gap-4 dimmed">
+<div class="task-icon bg-[var(--success-icon-bg)]">
+<span class="material-symbols-outlined text-[var(--success-text)]">calendar_month</span>
+</div>
+<div class="flex-grow">
+<p class="text-base font-medium text-[var(--success-text)]">Daily login bonus</p>
+<p class="text-sm text-[var(--secondary-text)]">You've got your daily reward!</p>
+</div>
+<div class="completed-badge animate-tada">
+<span class="material-symbols-outlined">check_circle</span>
+<span>Collected</span>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>
