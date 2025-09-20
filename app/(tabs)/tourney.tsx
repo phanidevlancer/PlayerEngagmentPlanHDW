@@ -15,6 +15,20 @@ import Svg, { Circle } from 'react-native-svg';
 // console.log("access_time:", !!MaterialIcons.glyphMap['access_time']);
 // console.log("timer:", !!MaterialIcons.glyphMap['timer']);
 
+const COLORS = {
+  primary: "#0A4A8F",
+  bgDark: "#0A1929",
+  surfaceDark: "#1C2A3A",
+  textLight: "#FFFFFF",
+  textSub: "#D1D5DB",
+  gray700: "#374151",
+  track: "#4B5563",
+  trackLight: "#E5E7EB",
+  highlight: "#FBBF24",
+  green: "#2E7D32",
+  blue: "#1D4ED8",
+};
+
 const C = { 
   primary: "#0A4A8F", 
   text: "#0C1B2A", 
@@ -248,35 +262,29 @@ export default function Tourney() {
   return (
     <View style={styles.screen}>
       {/* Top bar */}
-      <LinearGradient 
-        colors={[C.primary, '#1e3a8a']} 
-        style={styles.header}
-      >
-        <View style={styles.headerLeft}>
-          <View style={styles.avatarContainer}>
-            <Image 
-              source={{ uri: "https://lh3.googleusercontent.com/aida-public/AB6AXuAqHkuwN3qgHCH2yKGKdYEcgLR730up1dTP-fX6F4eL61TlCbVD1GNYUAxHONvaEUcU0JKbKEQgG7NO-Q4_dOF58VMEgXbq-Lq8uvtBqqjyU4rbhVPLQGR8--2sniorl0aee1vxq3gXD7SarP6Env8PPmrsZ1Z9FLIAGTrngKq4ef82oRkfS6m6n3BCToL-NSsImQ2PLyyD1vYLax4y5hgMx06rp8l6wYiNVx35nfp6JTXmNo-5Dtnm_tfdfYMIsHcC8d5P70SIL8A" }} 
-              style={styles.avatar}
-            />
-            <View style={styles.avatarBadge} />
-          </View>
-          <View style={styles.headerUserInfo}>
-            <Text style={styles.headerUsername} numberOfLines={1}>Phani2205</Text>
-            <Text style={styles.headerClub}>VIP Club</Text>
+      <View style={styles.header}>
+        <View style={styles.userLeft}>
+          <Image
+            source={{ uri: "https://i.pravatar.cc/100" }}
+            style={styles.avatar}
+          />
+          <View>
+            <Text style={styles.username}>Phani2205</Text>
+            <Text style={styles.tier}>VIP club</Text>
           </View>
         </View>
-        <View style={styles.headerActions}>
-          <View style={styles.notificationPill}>
-            <MaterialIcons name="notifications" size={16} color={C.yellow400} />
+        <View style={styles.headerRight}>
+          <View style={styles.pill}>
+            <MaterialIcons name="notifications" size={16} color="#FBBF24" />
             <Text style={styles.pillText}>1000</Text>
           </View>
-          <View style={styles.walletPill}>
-            <MaterialIcons name="notifications" size={16} color={C.yellow400} />
+          <View style={styles.pill}>
+            <MaterialIcons name="account-balance-wallet" size={16} color="#FBBF24" />
             <Text style={styles.pillText}>₹24.21</Text>
           </View>
-          <MaterialIcons name="notifications" size={24} color="#fff" />
+          <MaterialIcons name="notifications" size={20} color="#fff" />
         </View>
-      </LinearGradient>
+      </View>
 
       <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}>
         {DATA.map((t) => (
@@ -428,67 +436,42 @@ const styles = StyleSheet.create({
   
   // Header styles
   header: {
-    height: 60,
-    paddingHorizontal: 16,
+    padding: 8,
+    backgroundColor: COLORS.primary,
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-  },
-  headerLeft: {
-    flexDirection: "row",
     alignItems: "center",
-    gap: 8
   },
-  avatarContainer: {
-    position: "relative"
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 2,
-    borderColor: "#fff"
-  },
-  avatarBadge: {
-    position: "absolute",
-    bottom: -2,
-    right: -2,
-    backgroundColor: C.yellow400,
-    borderRadius: 10,
-    width: 16,
-    height: 16
-  },
-  headerUserInfo: {
-    justifyContent: "center"
-  },
-  headerUsername: {
-    color: "#fff",
-    fontWeight: "700",
-    fontSize: 14,
-    maxWidth: 80
-  },
-  headerClub: {
-    color: "#D1D5DB",
-    fontSize: 10
-  },
-  headerActions: { 
+  userLeft: { 
     flexDirection: "row", 
     alignItems: "center", 
-    gap: 12 
+    gap: 8 
   },
-  notificationPill: {
+  avatar: { 
+    width: 40, 
+    height: 40, 
+    borderRadius: 20, 
+    borderWidth: 2, 
+    borderColor: "#fff" 
+  },
+  username: { 
+    color: "#fff", 
+    fontWeight: "700" 
+  },
+  tier: { 
+    color: COLORS.textSub, 
+    fontSize: 12, 
+    fontWeight: '700'
+  },
+  headerRight: { 
+    flexDirection: "row", 
+    alignItems: "center", 
+    gap: 8 
+  },
+  pill: {
     backgroundColor: "rgba(17,25,40,0.5)",
     borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-  },
-  walletPill: {
-    backgroundColor: "rgba(17,25,40,0.5)",
-    borderRadius: 999,
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
     paddingVertical: 4,
     flexDirection: "row",
     alignItems: "center",
