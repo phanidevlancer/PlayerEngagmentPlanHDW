@@ -261,8 +261,8 @@ export default function Tourney() {
             <View style={styles.avatarBadge} />
           </View>
           <View style={styles.headerUserInfo}>
-            <Text style={styles.headerUsername} numberOfLines={1}>lordofrings1...</Text>
-            <Text style={styles.headerClub}>Bronze Club</Text>
+            <Text style={styles.headerUsername} numberOfLines={1}>Phani2205</Text>
+            <Text style={styles.headerClub}>VIP Club</Text>
           </View>
         </View>
         <View style={styles.headerActions}>
@@ -304,7 +304,7 @@ export default function Tourney() {
                   1st Prize: <Text style={styles.prizeValue}>{t.prizeLabel}</Text>
                 </Text>
                 <View style={styles.metaContainer}>
-                  <Small icon="monetization_on" text={t.coinTarget} />
+                  <Small icon="notifications" text={t.coinTarget} />
                   <Small icon="groups" text={t.seats || "0/0"} />
                   <Small icon="today" text={t.date} />
                 </View>
