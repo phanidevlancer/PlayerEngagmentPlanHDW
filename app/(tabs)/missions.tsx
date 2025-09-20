@@ -20,6 +20,9 @@ const C = {
   progressIndicatorBg: "#E0F2FE",
   progressIndicatorText: "#0284C7",
   progressBarFillAnimated: "#0EA5E9",
+  successBg: "#F0FDF4",
+  successText: "#16A34A",
+  successIconBg: "#D1FAE5",
 };
 
 function Progress({ pct, trackStyle, fillStyle, animated = false, gradient = false }: { pct: number, trackStyle?: any, fillStyle?: any, animated?: boolean, gradient?: boolean }) {
@@ -104,7 +107,7 @@ export default function Missions() {
           <Task title="Win 1 game of 101 Pool (any bet)" sub="0/1 completed" reward="+1,000" pct={0} />
           <Mini title="View a game result" sub="Rewards stack today" right="+100 each" icon="visibility" />
           <Mini title="Refer a friend" sub="+1,000 for each successful referral" rightBtn="Invite" icon="group-add" />
-          <Mini title="Daily login bonus" sub="Completed for today • refreshes daily" done icon="calendar-month" />
+          <Mini title="Daily login bonus" sub="You've got your daily reward!" done icon="calendar-month" />
         </View>
       </ScrollView>
     </View>
@@ -138,16 +141,41 @@ function Task({ title, sub, reward, pct }: { title: string; sub: string; reward:
 }
 
 function Mini({ title, sub, right, rightBtn, done = false, icon }: { title: string; sub: string; right?: string; rightBtn?: string; done?: boolean; icon: any }) {
+  const animatedValue = React.useRef(new Animated.Value(1)).current;
+
+  const tada = () => {
+    animatedValue.setValue(0.9);
+    Animated.spring(animatedValue, {
+      toValue: 1,
+      friction: 3,
+      tension: 40,
+      useNativeDriver: true,
+    }).start();
+  }
+
+  React.useEffect(() => {
+    if (done) {
+      tada();
+    }
+  }, [done]);
+
   return (
     <View style={[styles.simpleRow, done && styles.dimmedRow]}>
-      <View style={styles.taskIcon}><MaterialIcons name={icon} size={20} color={C.blue} /></View>
+      <View style={[styles.taskIcon, done && { backgroundColor: C.successIconBg }]}>
+        <MaterialIcons name={icon} size={24} color={done ? C.successText : C.blue} />
+      </View>
       <View style={{ flex: 1 }}>
-        <Text style={styles.taskTitle}>{title}</Text>
-        <Text style={[styles.taskSub, done && { color: C.green }]}>{sub}</Text>
+        <Text style={[styles.taskTitle, done && { color: C.successText }]}>{title}</Text>
+        <Text style={styles.taskSub}>{sub}</Text>
       </View>
       {right && <View style={styles.goldPill}><Text style={styles.goldPillText}>{right}</Text></View>}
       {rightBtn && <Pressable style={styles.inviteBtn}><Text style={{ color: "#fff", fontWeight: "800" }}>{rightBtn}</Text></Pressable>}
-      {done && <View style={styles.doneBadge}><MaterialIcons name="check" size={16} color="#fff" /><Text style={{ color: "#fff", fontWeight: "800" }}>Done</Text></View>}
+      {done && 
+        <Animated.View style={[styles.doneBadge, { transform: [{ scale: animatedValue }] }]}>
+          <MaterialIcons name="check-circle" size={18} color="#fff" />
+          <Text style={{ color: "#fff", fontWeight: "bold" }}>Collected</Text>
+        </Animated.View>
+      }
     </View>
   );
 }
@@ -166,7 +194,7 @@ const styles = StyleSheet.create({
 
   taskCard: { backgroundColor: C.card, borderRadius: 16, borderWidth: 1, borderColor: C.border, padding: 20, gap: 4 },
   simpleRow: { backgroundColor: C.card, borderRadius: 16, borderWidth: 1, borderColor: C.border, padding: 14, flexDirection: "row", alignItems: "center", gap: 12 },
-  dimmedRow: { opacity: 0.7, borderColor: C.green },
+  dimmedRow: { opacity: 0.6, backgroundColor: C.successBg, borderColor: C.successText },
 
   taskIcon: { width: 40, height: 40, borderRadius: 9999, backgroundColor: "rgba(37,99,235,0.1)", alignItems: "center", justifyContent: "center" },
   taskTitle: { fontWeight: "500", fontSize: 16, color: "#1F2937" },
@@ -187,7 +215,8 @@ const styles = StyleSheet.create({
     backgroundColor: C.progressIndicatorBg,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 6
+    borderRadius: 6,
+    whiteSpace: 'nowrap',
   },
   markerText: {
     color: C.progressIndicatorText,
@@ -203,5 +232,5 @@ const styles = StyleSheet.create({
   },
 
   inviteBtn: { backgroundColor: C.blue, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 999 },
-  doneBadge: { backgroundColor: C.green, paddingHorizontal: 10, paddingVertical: 6, borderRadius: 999, flexDirection: "row", alignItems: "center", gap: 6 },
+  doneBadge: { backgroundColor: C.successText, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 9999, flexDirection: "row", alignItems: "center", gap: 4 },
 });
