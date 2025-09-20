@@ -2,7 +2,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import React from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Animated, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 const C = {
   blue: "#2563EB",
@@ -17,16 +17,46 @@ const C = {
   heroBgEnd: "#1D4ED8",
   heroProgressTrack: "rgba(255, 255, 255, 0.3)",
   heroProgressFill: "#FBBF24",
+  progressIndicatorBg: "#E0F2FE",
+  progressIndicatorText: "#0284C7",
+  progressBarFillAnimated: "#0EA5E9",
 };
 
-function Progress({ pct, trackStyle, fillStyle }: { pct: number, trackStyle?: any, fillStyle?: any }) {
-  return <View style={[styles.track, trackStyle]}><View style={[styles.fill, fillStyle, { width: `${pct}%` }]} /></View>;
+function Progress({ pct, trackStyle, fillStyle, animated = false, gradient = false }: { pct: number, trackStyle?: any, fillStyle?: any, animated?: boolean, gradient?: boolean }) {
+  const animatedWidth = React.useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+    Animated.timing(animatedWidth, {
+      toValue: pct,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
+  }, [pct]);
+
+  const width = animatedWidth.interpolate({
+    inputRange: [0, 100],
+    outputRange: ["0%", "100%"],
+  });
+
+  const fill = gradient ? (
+    <Animated.View style={[{ width }, styles.fill]}>
+      <LinearGradient colors={[C.progressBarFillAnimated, '#38BDF8', C.progressBarFillAnimated]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{flex: 1}} />
+    </Animated.View>
+  ) : (
+    <Animated.View style={[styles.fill, fillStyle, { width }]} />
+  );
+
+  return (
+    <View style={[styles.track, trackStyle]}>
+      {fill}
+    </View>
+  );
 }
 
 export default function Missions() {
   return (
     <View style={styles.screen}>
-      {/* <View style={styles.appbar}>
+      {/* <View style={styles.appbar>
         <Link href="/lobby" asChild><Pressable style={{ flexDirection:"row", alignItems:"center", gap:4 }}><MaterialIcons name="chevron-left" size={20} color={C.blue} /><Text style={{ color:C.blue, fontWeight:"600" }}>Back to Lobby</Text></Pressable></Link>
         <View style={{ flexDirection:"row", alignItems:"center", gap:6 }}><MaterialIcons name="calendar-today" size={16} color={C.blue} /><Text style={{ color:C.blue, fontSize:12 }}>Refreshes daily</Text></View>
       </View>
@@ -85,13 +115,23 @@ function Task({ title, sub, reward, pct }: { title: string; sub: string; reward:
   return (
     <View style={styles.taskCard}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-        <View style={styles.taskIcon}><MaterialIcons name="military-tech" size={20} color={C.blue} /></View>
-        <View style={{ flex: 1 }}><Text style={styles.taskTitle}>{title}</Text><Text style={styles.taskSub}>{sub}</Text></View>
+        <View style={styles.taskIcon}><MaterialIcons name="military-tech" size={24} color={C.blue} /></View>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.taskTitle}>{title}</Text>
+          <Text style={styles.taskSub}>{sub}</Text>
+        </View>
         <View style={styles.goldPill}><Text style={styles.goldPillText}>{reward}</Text></View>
       </View>
-      <View style={{ marginTop: 8 }}>
-        <View style={styles.track}><View style={[styles.fill, { width: `${pct}%` }]} /></View>
-        <Text style={styles.marker}>{pct / 20}/5 Done</Text>
+      <View style={{ marginTop: 16, position: 'relative' }}>
+        <Progress pct={pct} animated gradient />
+        {pct > 0 && pct < 100 && (
+          <Animated.View style={[styles.markerContainer, { left: `${pct}%` }]}>
+            <View style={styles.marker}>
+              <Text style={styles.markerText}>{Math.floor(pct / 20)}/5 Done</Text>
+            </View>
+            <View style={styles.markerTriangle} />
+          </Animated.View>
+        )}
       </View>
     </View>
   );
@@ -124,20 +164,43 @@ const styles = StyleSheet.create({
   heroSub: { color: "rgba(255,255,255,0.8)", fontSize: 12 },
   rewardPill: { backgroundColor: "rgba(255,255,255,0.2)", paddingHorizontal: 16, paddingVertical: 6, borderRadius: 999, flexDirection: "row", alignItems: "center", gap: 4 },
 
-  taskCard: { backgroundColor: C.card, borderRadius: 16, borderWidth: 1, borderColor: C.border, padding: 14 },
+  taskCard: { backgroundColor: C.card, borderRadius: 16, borderWidth: 1, borderColor: C.border, padding: 20, gap: 4 },
   simpleRow: { backgroundColor: C.card, borderRadius: 16, borderWidth: 1, borderColor: C.border, padding: 14, flexDirection: "row", alignItems: "center", gap: 12 },
   dimmedRow: { opacity: 0.7, borderColor: C.green },
 
-  taskIcon: { width: 40, height: 40, borderRadius: 20, backgroundColor: "rgba(37,99,235,0.1)", alignItems: "center", justifyContent: "center" },
-  taskTitle: { fontWeight: "600" },
-  taskSub: { color: C.gray, fontSize: 12 },
+  taskIcon: { width: 40, height: 40, borderRadius: 9999, backgroundColor: "rgba(37,99,235,0.1)", alignItems: "center", justifyContent: "center" },
+  taskTitle: { fontWeight: "500", fontSize: 16, color: "#1F2937" },
+  taskSub: { color: C.gray, fontSize: 14 },
 
-  goldPill: { backgroundColor: "rgba(217,119,6,0.1)", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 999 },
-  goldPillText: { color: C.gold, fontWeight: "800", fontSize: 14 },
+  goldPill: { backgroundColor: "rgba(217,119,6,0.1)", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 9999 },
+  goldPillText: { color: C.gold, fontWeight: "bold", fontSize: 14 },
 
   track: { height: 12, backgroundColor: C.track, borderRadius: 999, overflow: "hidden" },
-  fill: { height: 12, backgroundColor: C.green },
-  marker: { marginTop: 4, color: "#0284C7", fontSize: 12 },
+  fill: { height: 12, backgroundColor: C.green, borderRadius: 9999 },
+  markerContainer: {
+    position: "absolute",
+    top: -26,
+    alignItems: "center",
+    transform: [{ translateX: -50 }],
+  },
+  marker: {
+    backgroundColor: C.progressIndicatorBg,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6
+  },
+  markerText: {
+    color: C.progressIndicatorText,
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+  markerTriangle: {
+    width: 10,
+    height: 10,
+    backgroundColor: C.progressIndicatorBg,
+    transform: [{ rotate: "45deg" }],
+    marginTop: -4,
+  },
 
   inviteBtn: { backgroundColor: C.blue, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 999 },
   doneBadge: { backgroundColor: C.green, paddingHorizontal: 10, paddingVertical: 6, borderRadius: 999, flexDirection: "row", alignItems: "center", gap: 6 },
