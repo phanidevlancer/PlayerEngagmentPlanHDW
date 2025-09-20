@@ -97,7 +97,14 @@ function IAPSection({ selectedMultiplier, onSelectMultiplier }: { selectedMultip
 }
 
 export default function Missions() {
-  const [boost, setBoost] = useState(2);
+  const [boost, setBoost] = useState(1);
+  const [iapVisible, setIapVisible] = useState(false);
+
+  const handleLongPress = () => {
+    const newVisibility = !iapVisible;
+    setIapVisible(newVisibility);
+    setBoost(newVisibility ? 2 : 1);
+  };
 
   return (
     <View style={styles.screen}>
@@ -107,7 +114,11 @@ export default function Missions() {
 
           <View style={{paddingHorizontal: 16}}>
             <Link href="/coins" asChild>
-              <Pressable style={styles.cardRow}>
+              <Pressable 
+                style={styles.cardRow}
+                onLongPress={handleLongPress}
+                delayLongPress={500}
+              >
                 <Text style={styles.cardRowTitle}>Your Current Coins</Text>
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
                   <MaterialIcons name="monetization-on" size={20} color={C.gold} />
@@ -117,9 +128,11 @@ export default function Missions() {
             </Link>
           </View>
 
-          <View style={{paddingHorizontal: 16}}>
-            <IAPSection selectedMultiplier={boost} onSelectMultiplier={setBoost} />
-          </View>
+          {iapVisible && (
+            <View style={{paddingHorizontal: 16}}>
+              <IAPSection selectedMultiplier={boost} onSelectMultiplier={setBoost} />
+            </View>
+          )}
 
           {/* Big daily progress card */}
           <View style={{paddingHorizontal: 16}}>
@@ -168,6 +181,9 @@ function Task({ title, sub, reward, pct, boost }: { title: string; sub: string; 
   const taskCardStyle = StyleSheet.flatten([styles.taskCard, isBoosted && styles.boostOverlay]);
   const taskTitleStyle = StyleSheet.flatten([styles.taskTitle, isBoosted && styles.boostedTaskTitle]);
   const taskSubStyle = StyleSheet.flatten([styles.taskSub, isBoosted && styles.boostedTaskSub]);
+  
+  // Ensure consistent height for reward section regardless of boost state
+  const rewardSectionHeight = isBoosted ? { minHeight: 40 } : { minHeight: 40 };
 
   return (
     <View style={{...taskCardStyle}}>
@@ -190,21 +206,23 @@ function Task({ title, sub, reward, pct, boost }: { title: string; sub: string; 
             <Text style={{...taskTitleStyle}}>{title}</Text>
             <Text style={{...taskSubStyle}}>{sub}</Text>
           </View>
-          {isBoosted ? (
-            <View style={{alignItems: 'flex-end'}}>
-                <Text style={styles.boostAppliedText}>Boost Applied: {boost}x</Text>
-                <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
-                    <Text style={styles.originalRewardText}>{reward}</Text>
-                    <View style={[styles.goldPill, styles.boostedRewardPill]}>
-                        <Text style={styles.goldPillText}>+{boostedReward.toLocaleString()}</Text>
-                    </View>
-                </View>
-            </View>
-          ) : (
-            <View style={styles.goldPill}>
-              <Text style={styles.goldPillText}>{reward}</Text>
-            </View>
-          )}
+          <View style={[rewardSectionHeight, { alignItems: 'flex-end', justifyContent: 'center' }]}>
+            {isBoosted ? (
+              <View style={{alignItems: 'flex-end'}}>
+                  <Text style={styles.boostAppliedText}>Boost Applied: {boost}x</Text>
+                  <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                      <Text style={styles.originalRewardText}>{reward}</Text>
+                      <View style={[styles.goldPill, styles.boostedRewardPill]}>
+                          <Text style={styles.goldPillText}>+{boostedReward.toLocaleString()}</Text>
+                      </View>
+                  </View>
+              </View>
+            ) : (
+              <View style={styles.goldPill}>
+                <Text style={styles.goldPillText}>{reward}</Text>
+              </View>
+            )}
+          </View>
         </View>
         <View style={{ marginTop: 16, position: 'relative' }}>
           <Progress pct={pct} animated gradient />
@@ -249,6 +267,9 @@ function Mini({ title, sub, right, rightBtn, done = false, icon, boost }: { titl
   const simpleRowStyle = StyleSheet.flatten([styles.simpleRow, done && styles.dimmedRow, isBoosted && styles.boostOverlay]);
   const taskTitleStyle = StyleSheet.flatten([styles.taskTitle, done && { color: C.successText }, isBoosted && styles.boostedTaskTitle]);
   const taskSubStyle = StyleSheet.flatten([styles.taskSub, isBoosted && styles.boostedTaskSub]);
+  
+  // Ensure consistent height for reward section regardless of boost state
+  const rewardSectionHeight = isBoosted ? { minHeight: 40 } : { minHeight: 40 };
 
   return (
     <View style={{...simpleRowStyle}}>
@@ -272,21 +293,23 @@ function Mini({ title, sub, right, rightBtn, done = false, icon, boost }: { titl
           <Text style={{...taskTitleStyle}}>{title}</Text>
           <Text style={{...taskSubStyle}}>{sub}</Text>
         </View>
-        {isBoosted && right ? (
-          <View style={{alignItems: 'flex-end'}}>
-              <Text style={styles.boostAppliedText}>Boost Applied: {boost}x</Text>
-              <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
-                  <Text style={styles.originalRewardText}>{right ? right.replace(/\s*each/i, '') : ''}</Text>
-                  <View style={[styles.goldPill, styles.boostedRewardPill]}>
-                      <Text style={styles.goldPillText}>+{boostedReward.toLocaleString()}{hasEach ? ' each' : ''}</Text>
-                  </View>
-              </View>
-          </View>
-        ) : (
-          right && <View style={styles.goldPill}>
-            <Text style={styles.goldPillText}>{right}</Text>
-          </View>
-        )}
+        <View style={[rewardSectionHeight, { alignItems: 'flex-end', justifyContent: 'center' }]}>
+          {isBoosted && right ? (
+            <View style={{alignItems: 'flex-end'}}>
+                <Text style={styles.boostAppliedText}>Boost Applied: {boost}x</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                    <Text style={styles.originalRewardText}>{right ? right.replace(/\s*each/i, '') : ''}</Text>
+                    <View style={[styles.goldPill, styles.boostedRewardPill]}>
+                        <Text style={styles.goldPillText}>+{boostedReward.toLocaleString()}{hasEach ? ' each' : ''}</Text>
+                    </View>
+                </View>
+            </View>
+          ) : (
+            right && <View style={styles.goldPill}>
+              <Text style={styles.goldPillText}>{right}</Text>
+            </View>
+          )}
+        </View>
         {rightBtn && <Pressable style={styles.inviteBtn}><Text style={{ color: "#fff", fontWeight: "800" }}>{rightBtn}</Text></Pressable>}
         {done && 
           <Animated.View style={[styles.doneBadge, { transform: [{ scale: animatedValue }] }]}>
@@ -373,7 +396,7 @@ const styles = StyleSheet.create({
   taskTitle: { fontWeight: "500", fontSize: 16, color: "#1F2937" },
   taskSub: { color: C.gray, fontSize: 14 },
 
-  goldPill: { backgroundColor: "rgba(217,119,6,0.1)", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 9999, flexDirection: "row", alignItems: "center", gap: 4 },
+  goldPill: { backgroundColor: "rgba(217,119,6,0.1)", paddingHorizontal: 12, paddingVertical: 6, borderRadius: 9999, flexDirection: "row", alignItems: "center", gap: 4, minHeight: 28 },
   goldPillText: { color: C.gold, fontWeight: "bold", fontSize: 14 },
 
   track: { height: 12, backgroundColor: C.track, borderRadius: 999, overflow: "hidden" },
@@ -408,6 +431,7 @@ const styles = StyleSheet.create({
 
   boostOverlay: {
     overflow: 'hidden',
+    position: 'relative',
   },
   boostGradient: {
     ...StyleSheet.absoluteFillObject,
@@ -425,8 +449,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
     color: '#78350F',
-    marginBottom: 4,
+    marginBottom: 2,
     textAlign: 'right',
+    lineHeight: 14,
   },
   originalRewardText: {
     textDecorationLine: 'line-through',
