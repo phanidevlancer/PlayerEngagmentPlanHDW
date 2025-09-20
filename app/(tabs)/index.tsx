@@ -18,6 +18,7 @@ const COLORS = {
 
 export default function Index() {
   const [filter, setFilter] = useState<"all" | "2p" | "6p">("all");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   // Sample data with player count information
   const gameData = [
@@ -38,6 +39,18 @@ export default function Index() {
     return true;
   });
 
+  // Sort data based on point value
+  const sortedData = [...filteredData].sort((a, b) => {
+    const aValue = parseFloat(a.pv);
+    const bValue = parseFloat(b.pv);
+    return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+  });
+
+  // Toggle sort order
+  const toggleSortOrder = () => {
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
   return (
     <View style={styles.screen}>
       <LobbyHeaderCarousel />
@@ -57,10 +70,14 @@ export default function Index() {
 
       {/* Table header */}
       <View style={styles.listHeader}>
-        <View style={styles.listHeaderLeft}>
+        <Pressable style={styles.listHeaderLeft} onPress={toggleSortOrder}>
           <Text style={styles.listHeaderLabel}>Point Value</Text>
-          <MaterialIcons name="arrow-downward" size={16} color={COLORS.muted} />
-        </View>
+          <MaterialIcons 
+            name={sortOrder === "asc" ? "arrow-upward" : "arrow-downward"} 
+            size={16} 
+            color={COLORS.muted} 
+          />
+        </Pressable>
         <Text style={styles.listHeaderLabel}>Players</Text>
         <Text style={styles.listHeaderLabel}>Action</Text>
       </View>
@@ -68,7 +85,7 @@ export default function Index() {
       {/* Rows */}
       {/* <LabelPill text="LAST PLAYED" /> */}
       <ScrollView>
-        {filteredData.map((r, idx) => (
+        {sortedData.map((r, idx) => (
           <Row key={idx} {...r} />
         ))}
       </ScrollView>
