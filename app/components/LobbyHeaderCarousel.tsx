@@ -66,14 +66,17 @@ export default function LobbyHeaderCarousel() {
                     pagingEnabled
                     showsHorizontalScrollIndicator={false}
                     onScroll={(e) => {
-                        const p = Math.round(e.nativeEvent.contentOffset.x / width);
-                        if (p !== page) setPage(p);
+                        const contentOffset = e.nativeEvent.contentOffset;
+                        const viewSize = e.nativeEvent.layoutMeasurement;
+                        const newPage = Math.floor(contentOffset.x / viewSize.width);
+                        if (newPage !== page) setPage(newPage);
                     }}
                     scrollEventThrottle={16}
+                    decelerationRate="fast"
                 >
                     {/* SLIDE 1 — Login Bonus hero with background overlay */}
-                    <View style={[styles.slide, { backgroundColor: COLORS.blue }]}>
-                        {/* the “absolute inset-0 bg-cover bg-center opacity-20” image overlay */}
+                    <View style={[styles.slide, { width: width - 16, backgroundColor: COLORS.blue }]}>
+                        {/* the "absolute inset-0 bg-cover bg-center opacity-20" image overlay */}
                         <Image
                             source={{
                                 uri:
@@ -94,7 +97,7 @@ export default function LobbyHeaderCarousel() {
                     </View>
 
                     {/* SLIDE 2 — Dark card with progress + actions */}
-                    <View style={[styles.slide, { backgroundColor: "transparent" }]}>
+                    <View style={[styles.slide, { width: width - 16 }]}>
                         <Link href="/tourney" asChild>
                             <Pressable style={styles.darkCard}>
                                 <View style={{ flexDirection: "row" }}>
@@ -145,8 +148,6 @@ export default function LobbyHeaderCarousel() {
                                 </View>
                             </Pressable>
                         </Link>
-
-
                     </View>
                 </ScrollView>
             </View>
@@ -186,10 +187,11 @@ const styles = StyleSheet.create({
     pillText: { color: "#fff", fontWeight: "700", fontSize: 12 },
 
     slide: {
-        width,
+        width: width - 16,
         height: BANNER_H,
         overflow: "hidden",
         justifyContent: "center",
+        borderRadius: 12,
     },
     bgOverlay: {
         ...StyleSheet.absoluteFillObject,
