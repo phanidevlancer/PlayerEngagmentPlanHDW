@@ -1,7 +1,7 @@
 // components/LobbyHeaderCarousel.tsx
 import { MaterialIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
     Dimensions,
     Image,
@@ -9,7 +9,9 @@ import {
     ScrollView,
     StyleSheet,
     Text,
-    View
+    View,
+    NativeSyntheticEvent,
+    NativeScrollEvent
 } from "react-native";
 
 const { width } = Dimensions.get("window");
@@ -31,6 +33,53 @@ const COLORS = {
 
 export default function LobbyHeaderCarousel() {
     const [page, setPage] = useState(0);
+    const scrollViewRef = useRef<ScrollView>(null);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        // Start the auto-scroll interval
+        intervalRef.current = setInterval(() => {
+            setPage(prevPage => {
+                const nextPage = (prevPage + 1) % 2; // Cycle between 0 and 1
+                scrollViewRef.current?.scrollTo({
+                    x: nextPage * (width - 16),
+                    animated: true
+                });
+                return nextPage;
+            });
+        }, 5000) as unknown as NodeJS.Timeout;
+
+        // Clean up interval on component unmount
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+        };
+    }, []);
+
+    // Clear and reset interval when user manually scrolls
+    const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const contentOffset = e.nativeEvent.contentOffset;
+        const viewSize = e.nativeEvent.layoutMeasurement;
+        const newPage = Math.floor(contentOffset.x / viewSize.width);
+        if (newPage !== page) {
+            setPage(newPage);
+            // Reset the interval
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+            intervalRef.current = setInterval(() => {
+                setPage(prevPage => {
+                    const nextPage = (prevPage + 1) % 2;
+                    scrollViewRef.current?.scrollTo({
+                        x: nextPage * (width - 16),
+                        animated: true
+                    });
+                    return nextPage;
+                });
+            }, 5000) as unknown as NodeJS.Timeout;
+        }
+    };
 
     return (
         <View>
@@ -62,15 +111,11 @@ export default function LobbyHeaderCarousel() {
             {/* Carousel */}
             <View style={{ borderRadius: 10, margin: 8, overflow: "hidden" }}>
                 <ScrollView
+                    ref={scrollViewRef}
                     horizontal
                     pagingEnabled
                     showsHorizontalScrollIndicator={false}
-                    onScroll={(e) => {
-                        const contentOffset = e.nativeEvent.contentOffset;
-                        const viewSize = e.nativeEvent.layoutMeasurement;
-                        const newPage = Math.floor(contentOffset.x / viewSize.width);
-                        if (newPage !== page) setPage(newPage);
-                    }}
+                    onScroll={handleScroll}
                     scrollEventThrottle={16}
                     decelerationRate="fast"
                 >
