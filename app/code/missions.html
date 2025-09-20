@@ -168,6 +168,24 @@
     .animate-bounce-in {
       animation: bounce-in 0.5s ease-out;
     }
+    .boosted-tag {
+        background-color: var(--boost-bg);
+        border: 1px solid var(--boost-border);
+        color: var(--boost-text);
+        padding: 2px 8px;
+        border-radius: 9999px;
+        font-size: 10px;
+        font-weight: 700;
+    }
+    .boost-overlay {
+        background: linear-gradient(135deg, rgba(254, 243, 199, 0.8) 0%, rgba(251, 191, 36, 0.8) 100%);
+        box-shadow: 0 0 0 2px #FBBF24;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
   </style>
 <style>
     body {
@@ -212,17 +230,17 @@
 <span class="material-symbols-outlined text-[var(--boost-text)] text-3xl">rocket_launch</span>
 </div>
 <div class="grid grid-cols-3 gap-3 text-center mb-4">
-<div class="bg-white/60 border border-amber-300 rounded-lg p-3 cursor-pointer hover:bg-amber-100 transition-colors">
-<p class="font-bold text-lg text-amber-600">1.5x</p>
-<p class="text-xs text-amber-700">for ₹250</p>
+<div class="bg-white/60 border border-amber-300 rounded-lg p-2 cursor-pointer hover:bg-amber-100 transition-colors flex-shrink-0">
+<p class="font-bold text-base text-amber-600">1.5x</p>
+<p class="text-xs text-amber-700 whitespace-nowrap">for ₹250</p>
 </div>
-<div class="bg-[var(--boost-active-bg)] border-2 border-[var(--boost-active-border)] rounded-lg p-3 cursor-pointer ring-2 ring-amber-200">
-<p class="font-bold text-lg text-amber-600">2x</p>
-<p class="text-xs text-amber-700">for ₹300</p>
+<div class="bg-[var(--boost-active-bg)] border-2 border-[var(--boost-active-border)] rounded-lg p-2 cursor-pointer ring-2 ring-amber-200 flex-shrink-0">
+<p class="font-bold text-base text-amber-600">2x</p>
+<p class="text-xs text-amber-700 whitespace-nowrap">for ₹300</p>
 </div>
-<div class="bg-white/60 border border-amber-300 rounded-lg p-3 cursor-pointer hover:bg-amber-100 transition-colors">
-<p class="font-bold text-lg text-amber-600">2.5x</p>
-<p class="text-xs text-amber-700">for ₹400</p>
+<div class="bg-white/60 border border-amber-300 rounded-lg p-2 cursor-pointer hover:bg-amber-100 transition-colors flex-shrink-0">
+<p class="font-bold text-base text-amber-600">2.5x</p>
+<p class="text-xs text-amber-700 whitespace-nowrap">for ₹400</p>
 </div>
 </div>
 <div class="flex flex-col items-center">
@@ -232,20 +250,29 @@
 </div>
 </div>
 <div class="px-4 pb-4">
-<div class="bg-gradient-to-br from-[var(--hero-bg-start)] to-[var(--hero-bg-end)] rounded-2xl p-5 text-[var(--hero-text)] shadow-lg cursor-pointer">
+<div class="bg-gradient-to-br from-[var(--hero-bg-start)] to-[var(--hero-bg-end)] rounded-2xl p-5 text-[var(--hero-text)] shadow-lg cursor-pointer relative overflow-hidden">
+<div class="absolute -top-4 -right-4 w-24 h-24 bg-yellow-400/50 rounded-full flex items-center justify-center opacity-80">
+<span class="material-symbols-outlined text-4xl text-white transform -rotate-12">bolt</span>
+</div>
+<div class="relative z-10">
 <div class="flex items-start justify-between mb-4">
 <div class="flex items-center gap-3">
 <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
 <span class="material-symbols-outlined text-3xl text-white">timer</span>
 </div>
 <div>
-<h3 class="text-xl font-bold">60 mins gameplay time</h3>
-<p class="text-sm opacity-80">Play for 23 minutes more to win</p>
+<h3 class="text-xl font-bold">60 mins gameplay</h3>
+<p class="text-sm opacity-80">Play 23m more to win</p>
 </div>
 </div>
-<div class="reward-pill bg-white/20 text-white border border-white/30">
-<span class="text-yellow-400 font-bold">2x</span>
-<span>+10,000</span>
+<div class="text-right flex-shrink-0 ml-2">
+<div class="text-sm font-bold bg-white/25 px-2 py-0.5 rounded-full mb-1 whitespace-nowrap">Boost Applied: 2x</div>
+<div class="flex items-center gap-1 justify-end">
+<span class="line-through text-sm opacity-70">20,000</span>
+<div class="reward-pill bg-white/20 text-white border border-white/30 whitespace-nowrap">
+<span>+40,000</span>
+</div>
+</div>
 </div>
 </div>
 <div class="flex items-center gap-3">
@@ -256,64 +283,95 @@
 </div>
 </div>
 </div>
+</div>
 <h2 class="text-lg font-bold text-[var(--primary-text)] px-4 pt-2 pb-2">Ways to earn more coins</h2>
 <div class="px-4 space-y-3 pb-4">
-<div class="card flex flex-col gap-4 cursor-pointer">
+<div class="card flex flex-col gap-4 cursor-pointer relative overflow-hidden boost-overlay">
+<div class="absolute top-0 right-0 p-1 bg-amber-400 rounded-bl-xl shadow-lg">
+<span class="material-symbols-outlined text-lg text-white">bolt</span>
+</div>
+<div class="relative z-10">
 <div class="flex items-center gap-4">
 <div class="task-icon">
 <span class="material-symbols-outlined text-[var(--primary-action)]">military_tech</span>
 </div>
 <div class="flex-grow">
-<p class="text-base font-medium text-[var(--primary-text)]">Win 5 Fun Chips games (100-pt)</p>
-<p class="text-sm text-[var(--secondary-text)]">You're getting there!</p>
+<p class="text-base font-medium text-amber-900 whitespace-nowrap">Win 5 Fun Chips games</p>
+<p class="text-sm text-amber-800">You're getting there!</p>
 </div>
-<div class="reward-pill">
-<span class="text-amber-500 font-bold">2x</span>
-<span>+5,000</span>
+<div class="text-right flex-shrink-0">
+<div class="text-xs font-bold text-amber-900 mb-1 whitespace-nowrap">Boost Applied: 2x</div>
+<div class="flex items-center gap-2 justify-end">
+<span class="text-xs line-through text-amber-800">10,000</span>
+<div class="reward-pill bg-white/50 border border-amber-500 whitespace-nowrap">
+<span>+20,000</span>
 </div>
 </div>
-<div class="relative">
-<div class="progress-bar flex-grow">
-<div class="progress-bar-fill progress-bar-fill-animated h-full" style="width: 60%;"></div>
+</div>
+</div>
+<div class="relative mt-2">
+<div class="progress-bar flex-grow bg-white/70">
+<div class="progress-bar-fill progress-bar-fill-animated h-full bg-sky-500" style="width: 60%;"></div>
 </div>
 <div class="absolute top-[-26px] left-[60%] -translate-x-1/2 animate-bounce-in" style="transition: left 0.5s ease-in-out;">
-<div class="bg-[var(--progress-indicator-bg)] text-[var(--progress-indicator-text)] text-xs font-bold px-2 py-1 rounded-md whitespace-nowrap">3/5 Done</div>
-<div class="w-2 h-2 bg-[var(--progress-indicator-bg)] mx-auto rotate-45 -mt-1"></div>
+<div class="bg-sky-100 text-sky-700 text-xs font-bold px-2 py-1 rounded-md whitespace-nowrap">3/5 Done</div>
+<div class="w-2 h-2 bg-sky-100 mx-auto rotate-45 -mt-1"></div>
 </div>
 </div>
 </div>
-<div class="card flex flex-col gap-3 cursor-pointer">
+</div>
+<div class="card flex flex-col gap-3 cursor-pointer relative overflow-hidden boost-overlay">
+<div class="absolute top-0 right-0 p-1 bg-amber-400 rounded-bl-xl shadow-lg">
+<span class="material-symbols-outlined text-lg text-white">bolt</span>
+</div>
+<div class="relative z-10">
 <div class="flex items-center gap-4">
 <div class="task-icon">
 <span class="material-symbols-outlined text-[var(--primary-action)]">pool</span>
 </div>
 <div class="flex-grow">
-<p class="text-base font-medium text-[var(--primary-text)]">Win 1 game of 101 Pool (any bet)</p>
-<p class="text-sm text-[var(--secondary-text)]">0/1 completed</p>
+<p class="text-base font-medium text-amber-900 whitespace-nowrap">Win 1 game of 101 Pool</p>
+<p class="text-sm text-amber-800">0/1 completed</p>
 </div>
-<div class="reward-pill">
-<span class="text-amber-500 font-bold">2x</span>
-<span>+1,000</span>
+<div class="text-right flex-shrink-0">
+<div class="text-xs font-bold text-amber-900 mb-1 whitespace-nowrap">Boost Applied: 2x</div>
+<div class="flex items-center gap-2 justify-end">
+<span class="text-xs line-through text-amber-800">2,000</span>
+<div class="reward-pill bg-white/50 border border-amber-500 whitespace-nowrap">
+<span>+4,000</span>
 </div>
 </div>
-<div class="flex items-center gap-3">
-<div class="progress-bar flex-grow">
+</div>
+</div>
+<div class="flex items-center gap-3 mt-1">
+<div class="progress-bar flex-grow bg-white/70">
 <div class="progress-bar-fill" style="width: 0%;"></div>
 </div>
-<span class="text-xs font-medium text-[var(--primary-text)]">0/1</span>
+<span class="text-xs font-medium text-amber-900">0/1</span>
 </div>
 </div>
-<div class="card flex items-center gap-4 cursor-pointer">
+</div>
+<div class="card flex items-center gap-4 cursor-pointer relative overflow-hidden boost-overlay">
+<div class="absolute top-0 right-0 p-1 bg-amber-400 rounded-bl-xl shadow-lg">
+<span class="material-symbols-outlined text-lg text-white">bolt</span>
+</div>
+<div class="relative z-10 flex items-center gap-4 w-full">
 <div class="task-icon">
 <span class="material-symbols-outlined text-[var(--primary-action)]">visibility</span>
 </div>
 <div class="flex-grow">
-<p class="text-base font-medium text-[var(--primary-text)]">View a game result</p>
-<p class="text-sm text-[var(--secondary-text)]">Rewards stack today</p>
+<p class="text-base font-medium text-amber-900 whitespace-nowrap">View a game result</p>
+<p class="text-sm text-amber-800">Rewards stack daily</p>
 </div>
-<div class="reward-pill">
-<span class="text-amber-500 font-bold">2x</span>
-<span>+100 each</span>
+<div class="text-right flex-shrink-0">
+<div class="text-xs font-bold text-amber-900 mb-1 whitespace-nowrap">Boost Applied: 2x</div>
+<div class="flex items-center gap-2 justify-end">
+<span class="text-xs line-through text-amber-800">200</span>
+<div class="reward-pill bg-white/50 border border-amber-500 whitespace-nowrap">
+<span>+400 each</span>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="card flex items-center gap-4 cursor-pointer">
@@ -321,20 +379,20 @@
 <span class="material-symbols-outlined text-[var(--primary-action)]">group_add</span>
 </div>
 <div class="flex-grow">
-<p class="text-base font-medium text-[var(--primary-text)]">Refer a friend</p>
-<p class="text-sm text-[var(--secondary-text)]">+1,000 for each successful referral</p>
+<p class="text-base font-medium text-[var(--primary-text)] whitespace-nowrap">Refer a friend</p>
+<p class="text-sm text-[var(--secondary-text)]">+1,000 per referral</p>
 </div>
-<button class="invite-button">Invite</button>
+<button class="invite-button flex-shrink-0">Invite</button>
 </div>
 <div class="card flex items-center gap-4 dimmed">
 <div class="task-icon bg-[var(--success-icon-bg)]">
 <span class="material-symbols-outlined text-[var(--success-text)]">calendar_month</span>
 </div>
 <div class="flex-grow">
-<p class="text-base font-medium text-[var(--success-text)]">Daily login bonus</p>
-<p class="text-sm text-[var(--secondary-text)]">You've got your daily reward!</p>
+<p class="text-base font-medium text-[var(--success-text)] whitespace-nowrap">Daily login bonus</p>
+<p class="text-sm text-[var(--secondary-text)]">Daily reward collected!</p>
 </div>
-<div class="completed-badge animate-tada">
+<div class="completed-badge animate-tada flex-shrink-0">
 <span class="material-symbols-outlined">check_circle</span>
 <span>Collected</span>
 </div>
@@ -342,5 +400,4 @@
 </div>
 </main>
 </div>
-
 </body></html>
