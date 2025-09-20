@@ -330,34 +330,84 @@ export default function Tourney() {
             {/* Actions */}
             <View style={styles.actions}>
               {t.status === "locked" && (
-                <>
+                <View style={{ flexDirection: "row", gap: 8 }}>
                   <Link href="/missions" asChild>
-                    <Pressable style={({ pressed }) => [
-                      styles.earnCoinsButton,
-                      pressed && styles.buttonPressed
-                    ]}>
+                    <Pressable 
+                      style={{
+                        flex: 1,
+                        height: 36,
+                        borderRadius: 8,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexDirection: "row",
+                        gap: 4,
+                        backgroundColor: C.gray200,
+                        paddingHorizontal: 12
+                      }}
+                    >
                       <Text style={[styles.buttonText, { color: C.text }]}>🚀 Earn Coins</Text>
                     </Pressable>
                   </Link>
-                  <Pressable style={styles.lockedButton} disabled>
+                  <Pressable 
+                    style={{
+                      flex: 1,
+                      height: 36,
+                      borderRadius: 8,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexDirection: "row",
+                      gap: 4,
+                      backgroundColor: "rgba(34, 160, 107, 0.3)",
+                      opacity: 0.7,
+                      paddingHorizontal: 12
+                    }}
+                    disabled
+                  >
                     <MaterialIcons name="lock" size={14} color="#fff" />
                     <Text style={styles.buttonText}>Register</Text>
                   </Pressable>
-                </>
+                </View>
               )}
 
               {t.status === "open" && t.canRegisterNow && (
-                <Pressable style={({ pressed }) => [
-                  styles.registerButton,
-                  pressed && styles.buttonPressed
-                ]}>
+                <Pressable 
+                  style={{
+                    flex: 1,
+                    height: 36,
+                    borderRadius: 8,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "row",
+                    gap: 4,
+                    backgroundColor: C.green,
+                    shadowColor: C.green500,
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: 0.4,
+                    shadowRadius: 6,
+                    elevation: 5,
+                    paddingHorizontal: 12
+                  }}
+                >
                   <MaterialIcons name="stars" size={14} color="#fff" />
                   <Text style={styles.buttonText}>Register Now</Text>
                 </Pressable>
               )}
 
               {t.status === "registered" && (
-                <Pressable style={styles.timerButton} disabled>
+                <Pressable 
+                  style={{
+                    flex: 1,
+                    height: 36,
+                    borderRadius: 8,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "row",
+                    gap: 4,
+                    backgroundColor: "rgba(59, 130, 246, 0.5)",
+                    paddingHorizontal: 12
+                  }}
+                  disabled
+                >
                   <MaterialIcons name="timer" size={14} color="#fff" />
                   <Text style={styles.buttonText}>Starts in 2 days</Text>
                 </Pressable>
@@ -634,55 +684,7 @@ const styles = StyleSheet.create({
 
   // Actions
   actions: { 
-    flexDirection: "row", 
-    gap: 8, 
     marginTop: 8 
-  },
-  earnCoinsButton: {
-    flex: 1,
-    height: 36,
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-    gap: 4,
-    backgroundColor: C.gray200,
-  },
-  lockedButton: {
-    flex: 1,
-    height: 36,
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-    gap: 4,
-    backgroundColor: "rgba(34, 160, 107, 0.3)",
-    opacity: 0.7
-  },
-  registerButton: {
-    flex: 1,
-    height: 36,
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-    gap: 4,
-    backgroundColor: C.green,
-    shadowColor: C.green500,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 6,
-    elevation: 5
-  },
-  timerButton: {
-    flex: 1,
-    height: 36,
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-    gap: 4,
-    backgroundColor: "rgba(59, 130, 246, 0.5)",
   },
   buttonText: {
     color: "#fff",
