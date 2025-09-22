@@ -66,7 +66,7 @@ const IAP_OPTIONS = [
   { multiplier: 1, price: 0 },
   { multiplier: 1.5, price: 250 },
   { multiplier: 2, price: 300 },
-  { multiplier: 2.5, price: 400 },
+  { multiplier: 4, price: 600 },
 ];
 
 function IAPSection({ selectedMultiplier, onSelectMultiplier }: { selectedMultiplier: number, onSelectMultiplier: (multiplier: number) => void }) {
@@ -163,7 +163,7 @@ export default function Missions() {
           <View style={{ gap: 16, paddingHorizontal: 16 }}>
             <Task title="Win 5 Fun Chips games (100-pt)" sub="You're getting there!" reward="+5,000" pct={60} boost={boost} />
             <Task title="Win 1 game of 101 Pool (any bet)" sub="0/1 completed" reward="+1,000" pct={0} boost={boost} />
-            <Mini title="View a game result" sub="Rewards stack today" right="+100 each" icon="visibility" boost={boost} />
+            <Mini title="100 ace coins for every valid show" sub="Rewards stack today" right="+100 each" icon="visibility" boost={boost} />
             <Mini title="Refer a friend" sub="+1,000 for each successful referral" rightBtn="Invite" icon="group-add" />
             <Mini title="Daily login bonus" sub="You've got your daily reward!" done icon="calendar-month" />
           </View>

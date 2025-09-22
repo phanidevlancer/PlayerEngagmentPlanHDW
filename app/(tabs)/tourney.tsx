@@ -1,5 +1,4 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from "expo-router";
 import React from "react";
 import { Animated, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -29,10 +28,10 @@ const COLORS = {
   blue: "#1D4ED8",
 };
 
-const C = { 
-  primary: "#0A4A8F", 
-  text: "#0C1B2A", 
-  green: "#22A06B", 
+const C = {
+  primary: "#0A4A8F",
+  text: "#0C1B2A",
+  green: "#22A06B",
   blue: "#2563EB",
   lightGray: "#F5F6F8",
   darkGray: "#64748B",
@@ -125,14 +124,14 @@ const DATA: TourneyItem[] = [
 
 function Progress({ pct, status }: { pct: number; status: Status }) {
   // Define colors based on status
-  const progressColor = 
-    status === "open" ? C.green500 : 
-    status === "registered" ? C.blue500 : 
-    C.green;
-  
+  const progressColor =
+    status === "open" ? C.green500 :
+      status === "registered" ? C.blue500 :
+        C.green;
+
   // Animation for progress bar
   const [widthAnim] = React.useState(new Animated.Value(0));
-  
+
   React.useEffect(() => {
     Animated.timing(widthAnim, {
       toValue: pct,
@@ -140,22 +139,22 @@ function Progress({ pct, status }: { pct: number; status: Status }) {
       useNativeDriver: false,
     }).start();
   }, [pct]);
-  
+
   const animatedWidth = widthAnim.interpolate({
     inputRange: [0, 100],
     outputRange: ['0%', '100%'],
   });
-  
+
   return (
     <View style={styles.track}>
-      <Animated.View 
+      <Animated.View
         style={[
-          styles.fill, 
-          { 
-            width: animatedWidth, 
+          styles.fill,
+          {
+            width: animatedWidth,
             backgroundColor: progressColor,
           }
-        ]} 
+        ]}
       />
     </View>
   );
@@ -165,7 +164,7 @@ function AnimatedImage({ source, style }: { source: any; style: any }) {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
   const opacity = React.useRef(new Animated.Value(0)).current;
-  
+
   React.useEffect(() => {
     Animated.timing(opacity, {
       toValue: 1,
@@ -173,7 +172,7 @@ function AnimatedImage({ source, style }: { source: any; style: any }) {
       useNativeDriver: true,
     }).start();
   }, []);
-  
+
   return (
     <View style={[style, styles.imageContainer]}>
       {loading && (
@@ -209,7 +208,7 @@ function AnimatedImage({ source, style }: { source: any; style: any }) {
 function Small({ icon, text }: { icon: IconName; text: string }) {
   // Fallback to a default icon if the requested one is not available
   const validIcon = Object.keys(MaterialIcons.glyphMap).includes(icon) ? icon : "help";
-  
+
   return (
     <View style={styles.metaItem}>
       <MaterialIcons name={validIcon} size={14} color={C.darkGray} />
@@ -224,12 +223,12 @@ function CircularProgress({ percentage }: { percentage: number }) {
   const normalizedRadius = radius - strokeWidth * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
-  
+
   // Determine color based on percentage
   let strokeColor = "#EF4444"; // red-500
   if (percentage >= 70) strokeColor = "#F59E0B"; // yellow-500
   if (percentage >= 90) strokeColor = "#10B981"; // green-500
-  
+
   return (
     <View style={styles.circularProgressContainer}>
       <Svg height={radius * 2} width={radius * 2}>
@@ -325,10 +324,10 @@ export default function Tourney() {
                   ) : (
                     <Text style={styles.progressLabel}>
                       <Text style={{ color: C.text }}>
-                        {t.coinTarget === "25L" ? "20L" : 
-                         t.coinTarget === "10L" ? "10L" : 
-                         t.coinTarget === "30L" ? "19.5L" : 
-                         t.coinTarget === "15L" ? "13.5L" : "0L"}
+                        {t.coinTarget === "25L" ? "20L" :
+                          t.coinTarget === "10L" ? "10L" :
+                            t.coinTarget === "30L" ? "19.5L" :
+                              t.coinTarget === "15L" ? "13.5L" : "0L"}
                       </Text> / {t.coinTarget} Coins
                     </Text>
                   )}
@@ -340,7 +339,7 @@ export default function Tourney() {
               {t.status === "locked" && (
                 <View style={{ flexDirection: "row", gap: 8 }}>
                   <Link href="/missions" asChild>
-                    <Pressable 
+                    <Pressable
                       style={{
                         flex: 1,
                         height: 36,
@@ -356,7 +355,7 @@ export default function Tourney() {
                       <Text style={[styles.buttonText, { color: C.text }]}>🚀 Earn Coins</Text>
                     </Pressable>
                   </Link>
-                  <Pressable 
+                  <Pressable
                     style={{
                       flex: 1,
                       height: 36,
@@ -378,7 +377,7 @@ export default function Tourney() {
               )}
 
               {t.status === "open" && t.canRegisterNow && (
-                <Pressable 
+                <Pressable
                   style={{
                     flex: 1,
                     height: 36,
@@ -402,7 +401,7 @@ export default function Tourney() {
               )}
 
               {t.status === "registered" && (
-                <Pressable 
+                <Pressable
                   style={{
                     flex: 1,
                     height: 36,
@@ -429,11 +428,11 @@ export default function Tourney() {
 }
 
 const styles = StyleSheet.create({
-  screen: { 
-    flex: 1, 
-    backgroundColor: C.lightGray 
+  screen: {
+    flex: 1,
+    backgroundColor: C.lightGray
   },
-  
+
   // Header styles
   header: {
     padding: 8,
@@ -442,31 +441,31 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  userLeft: { 
-    flexDirection: "row", 
-    alignItems: "center", 
-    gap: 8 
+  userLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8
   },
-  avatar: { 
-    width: 40, 
-    height: 40, 
-    borderRadius: 20, 
-    borderWidth: 2, 
-    borderColor: "#fff" 
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: "#fff"
   },
-  username: { 
-    color: "#fff", 
-    fontWeight: "700" 
+  username: {
+    color: "#fff",
+    fontWeight: "700"
   },
-  tier: { 
-    color: COLORS.textSub, 
-    fontSize: 12, 
+  tier: {
+    color: COLORS.textSub,
+    fontSize: 12,
     fontWeight: '700'
   },
-  headerRight: { 
-    flexDirection: "row", 
-    alignItems: "center", 
-    gap: 8 
+  headerRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8
   },
   pill: {
     backgroundColor: "rgba(17,25,40,0.5)",
@@ -477,26 +476,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 4,
   },
-  pillText: { 
-    color: "#fff", 
-    fontWeight: "700", 
-    fontSize: 12 
+  pillText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 12
   },
 
   // Scroll view styles
-  scrollContainer: { 
-    flex: 1 
+  scrollContainer: {
+    flex: 1
   },
-  scrollContent: { 
-    padding: 12, 
+  scrollContent: {
+    padding: 12,
     gap: 12,
     paddingBottom: 100
   },
 
   // Card styles
-  card: { 
-    backgroundColor: "#fff", 
-    borderRadius: 12, 
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
     padding: 12,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
@@ -504,13 +503,13 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 3,
   },
-  cardOpen: { 
-    borderColor: "#10B981", 
+  cardOpen: {
+    borderColor: "#10B981",
     backgroundColor: "#ECFDF5",
     borderWidth: 1
   },
-  cardRegistered: { 
-    borderColor: "#3B82F6", 
+  cardRegistered: {
+    borderColor: "#3B82F6",
     backgroundColor: "#EFF6FF",
     borderWidth: 1
   },
@@ -536,7 +535,7 @@ const styles = StyleSheet.create({
 
   // Card header
   cardHeader: {
-    flexDirection: "row", 
+    flexDirection: "row",
     gap: 12
   },
   imageContainer: {
@@ -565,22 +564,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
-  prizeImage: { 
-    width: 80, 
-    height: 80, 
+  prizeImage: {
+    width: 80,
+    height: 80,
     borderRadius: 8
   },
   cardHeaderText: {
     flex: 1
   },
-  title: { 
-    color: C.text, 
-    fontWeight: "700", 
+  title: {
+    color: C.text,
+    fontWeight: "700",
     fontSize: 16,
     marginBottom: 4
   },
-  prizeText: { 
-    color: C.gray500, 
+  prizeText: {
+    color: C.gray500,
     fontSize: 10,
     marginBottom: 4
   },
@@ -588,8 +587,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 12
   },
-  metaContainer: { 
-    flexDirection: "row", 
+  metaContainer: {
+    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 4
@@ -619,34 +618,34 @@ const styles = StyleSheet.create({
 
   // Small component
   smallContainer: {
-    flexDirection: "row", 
-    alignItems: "center", 
+    flexDirection: "row",
+    alignItems: "center",
     gap: 4
   },
-  smallText: { 
-    color: C.gray500, 
-    fontSize: 12 
+  smallText: {
+    color: C.gray500,
+    fontSize: 12
   },
 
   // Progress section
   progressSection: {
     marginTop: 8
   },
-  track: { 
-    height: 8, 
-    backgroundColor: C.gray200, 
-    borderRadius: 999, 
+  track: {
+    height: 8,
+    backgroundColor: C.gray200,
+    borderRadius: 999,
     overflow: "hidden",
     marginTop: 8
   },
-  fill: { 
-    height: 8, 
+  fill: {
+    height: 8,
     borderRadius: 999
   },
-  progressLabel: { 
-    textAlign: "right", 
-    marginTop: 4, 
-    fontWeight: "600", 
+  progressLabel: {
+    textAlign: "right",
+    marginTop: 4,
+    fontWeight: "600",
     color: C.text,
     fontSize: 12
   },
@@ -666,8 +665,8 @@ const styles = StyleSheet.create({
   },
 
   // Actions
-  actions: { 
-    marginTop: 8 
+  actions: {
+    marginTop: 8
   },
   buttonText: {
     color: "#fff",
